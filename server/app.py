@@ -5,10 +5,10 @@ from flask import Flask, request, make_response,jsonify
 from flask_restful import Api, Resource
 import os
 
-BASE_DIR = os.path.abspath(os.path.dirname(_file_))
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 DATABASE = os.environ.get("DB_URI", f"sqlite:///{os.path.join(BASE_DIR, 'app.db')}")
 
-app = Flask(_name_)
+app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.json.compact = False
@@ -57,7 +57,7 @@ class RestaurantPizzas(Resource):
         price = data.get("price")
         pizza_id = data.get("pizza_id")
         restaurant_id = data.get("restaurant_id")
-        
+
         # Validation for price
         if not (price and 1 <= price <= 30):
             return make_response(jsonify({"errors": ["validation errors"]}), 400)
@@ -85,5 +85,5 @@ api.add_resource(Pizzas, "/pizzas")
 api.add_resource(RestaurantPizzas, "/restaurant_pizzas")
 
 
-if _name_ == "_main_":
+if __name__ == "_main_":
     app.run(port=5555, debug=True)
